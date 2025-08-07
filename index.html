@@ -154,8 +154,16 @@
             margin-right: 6px;
         }
         .info.legend label {
-            display: block;
+            display: flex;
+            align-items: center;
             margin-bottom: 4px;
+            opacity: 1;
+            transition: opacity 0.2s;
+        }
+        .legend-color-box {
+            width: 12px;
+            height: 12px;
+            margin-right: 6px;
         }
     </style>
 </head>
@@ -165,21 +173,15 @@
     </div>
     <div class="container">
         <div class="section intro">
-            <p>
-                In the Netherlands, it's common for restaurants and cafés to charge exorbitant prices for bottled water. [...] 
-            </p>
+            <p>In the Netherlands, it's common for restaurants and cafés to charge exorbitant prices for bottled water...</p>
         </div>
         <div class="section objective">
             <h2>Objective</h2>
-            <p>
-                Our goal is to create a collaborative database of restaurants and cafés that provide free or reasonably priced tap water. [...]
-            </p>
+            <p>Our goal is to create a collaborative database of restaurants and cafés that provide free or reasonably priced tap water...</p>
         </div>
         <div class="section help">
             <h2>How You Can Help</h2>
-            <p>
-                If you know of a restaurant or café that offers free or affordable tap water, please share their details with us. [...]
-            </p>
+            <p>If you know of a restaurant or café that offers free or affordable tap water, please share their details with us...</p>
         </div>
         <div class="btn-wrap">
             <button class="share-btn" onclick="openModal()">Share Details</button>
@@ -194,11 +196,7 @@
             <iframe id="modal-iframe" src="https://app.youform.com/forms/ubbqidvt"></iframe>
         </div>
     </div>
-    <script 
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin="">
-    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
         function openModal() {
             document.getElementById("modal").style.display = "flex";
@@ -212,78 +210,76 @@
 
         const map = L.map('map').setView([52.37, 4.89], 7);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap contributors'
+            attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
         const categoryGroups = {};
         const allCategories = new Set();
 
         fetch("restaurants.json")
-          .then(response => response.json())
-          .then(data => {
-            data.forEach(restaurant => {
-              const category = restaurant["Tap Water Policy"] || "Unknown";
-              allCategories.add(category);
-              if (!categoryGroups[category]) {
-                categoryGroups[category] = L.layerGroup().addTo(map);
-              }
-              const marker = L.circleMarker([restaurant.Latitude, restaurant.Longitude], {
-                radius: 8,
-                color: getColor(category),
-                fillColor: getColor(category),
-                fillOpacity: 0.8
-              }).bindPopup(`
-                <div class="popup-content">
-                <div><b>${restaurant["Restaurant Name"]}</b></div>
-                <div><u>${restaurant.City} - ${restaurant.Address}</u></div>
-                <div><i>${category}</i></div>
-                <div>${restaurant.Comments || ""}</div>
-                </div>
-              `);
-              categoryGroups[category].addLayer(marker);
-            });
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(r => {
+                    const cat = r["Tap Water Policy"] || "Unknown";
+                    allCategories.add(cat);
+                    if (!categoryGroups[cat]) categoryGroups[cat] = L.layerGroup().addTo(map);
+                    const m = L.circleMarker([r.Latitude, r.Longitude], {
+                        radius: 8,
+                        color: getColor(cat),
+                        fillColor: getColor(cat),
+                        fillOpacity: 0.8
+                    }).bindPopup(`
+                        <div class="popup-content">
+                            <div><b>${r["Restaurant Name"]}</b></div>
+                            <div><u>${r.City} - ${r.Address}</u></div>
+                            <div><i>${cat}</i></div>
+                            <div>${r.Comments || ""}</div>
+                        </div>
+                    `);
+                    categoryGroups[cat].addLayer(m);
+                });
 
-            const legend = L.control({ position: "topright" });
-            legend.onAdd = function(map) {
-              const div = L.DomUtil.create("div", "info legend");
-              div.innerHTML += "<strong>Tap Water Policy</strong><br>";
-              allCategories.forEach(category => {
-                const safeId = category.replace(/\s+/g, '_');
-                div.innerHTML += `
-                  <label id="label_${safeId}" style="opacity: 1;">
-                    <input type="checkbox" class="legend-checkbox" data-category="${category}" checked>
-                    ${category}
-                  </label>
-                `;
-              });
-              return div;
-            };
-            legend.addTo(map);
+                const legend = L.control({ position: "topright" });
+                legend.onAdd = function () {
+                    const div = L.DomUtil.create("div", "info legend");
+                    div.innerHTML += "<strong>Tap Water Policy</strong><br>";
+                    allCategories.forEach(cat => {
+                        const safeId = cat.replace(/\s+/g, '_');
+                        div.innerHTML += `
+                            <label id="label_${safeId}" style="opacity:1">
+                                <input type="checkbox" class="legend-checkbox" data-category="${cat}" checked>
+                                <span class="legend-color-box" style="background:${getColor(cat)}"></span>
+                                <span class="legend-text">${cat}</span>
+                            </label>
+                        `;
+                    });
+                    return div;
+                };
+                legend.addTo(map);
 
-            document.querySelectorAll(".legend-checkbox").forEach(checkbox => {
-              checkbox.addEventListener("change", (e) => {
-                const category = e.target.dataset.category;
-                const isChecked = e.target.checked;
-                const safeId = category.replace(/\s+/g, '_');
-                const label = document.getElementById("label_" + safeId);
-                if (isChecked) {
-                  categoryGroups[category].addTo(map);
-                  label.style.opacity = 1;
-                } else {
-                  map.removeLayer(categoryGroups[category]);
-                  label.style.opacity = 0.4;
-                }
-              });
+                document.querySelectorAll(".legend-checkbox").forEach(cb => {
+                    cb.addEventListener("change", e => {
+                        const cat = e.target.dataset.category;
+                        const isOn = e.target.checked;
+                        const label = document.getElementById("label_" + cat.replace(/\s+/g, '_'));
+                        if (isOn) {
+                            categoryGroups[cat].addTo(map);
+                            label.style.opacity = 1;
+                        } else {
+                            map.removeLayer(categoryGroups[cat]);
+                            label.style.opacity = 0.4;
+                        }
+                    });
+                });
             });
-          });
 
         function getColor(policy) {
-          switch (policy) {
-            case "No, they charge high price": return "red";
-            case "Yes, at reasonable cost": return "orange";
-            case "Yes, for free": return "green";
-            default: return "blue";
-          }
+            switch (policy) {
+                case "No, they charge high price": return "red";
+                case "Yes, at reasonable cost": return "orange";
+                case "Yes, for free": return "green";
+                default: return "blue";
+            }
         }
     </script>
 </body>
