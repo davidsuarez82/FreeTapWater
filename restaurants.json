@@ -70,5 +70,59 @@
     "Longitude": 4.88428438,
     "Tap Water Policy": "No, they charge high price",
     "Comments": "They refuse to give tap water when asked and say only bottle water is available, despite being a bar and serving a lot of alcohol, they do not offer free water with any alcohol."
+  },
+  {
+    "Restaurant Name": "Duke of Tokyo",
+    "City": "Amsterdam",
+    "Address": "Reguliersdwarsstraat 37",
+    "Latitude": 52.36659861,
+    "Longitude": 4.89062678,
+    "Tap Water Policy": "Yes, for free",
+    "Comments": ""
+  },
+  {
+    "Restaurant Name": "Spaghetteria",
+    "City": "Rotterdam",
+    "Address": "Nieuwe Binnenweg 77",
+    "Latitude": 51.91697405,
+    "Longitude": 4.46938679,
+    "Tap Water Policy": "Yes, for free",
+    "Comments": ""
+  },
+  {
+    "Restaurant Name": "Spaghetteria",
+    "City": "Rotterdam",
+    "Address": "Pannekoekstraat 76",
+    "Latitude": 51.92320544,
+    "Longitude": 4.4883681,
+    "Tap Water Policy": "Yes, for free",
+    "Comments": ""
+  },
+  {
+    "Restaurant Name": "Oasis Rotterdam",
+    "City": "Rotterdam",
+    "Address": "Schiehaven 15-A",
+    "Latitude": 51.90268732,
+    "Longitude": 4.45211864,
+    "Tap Water Policy": "Yes, for free",
+    "Comments": ""
+  },
+  {
+    "Restaurant Name": "Mr. Finch",
+    "City": "Utrecht",
+    "Address": "Drieharingstraat 5",
+    "Latitude": 52.09225634,
+    "Longitude": 5.11605058,
+    "Tap Water Policy": "Yes, for free",
+    "Comments": ""
+  },
+  {
+    "Restaurant Name": "Mori Japanese bistro",
+    "City": "Rotterdam",
+    "Address": "Van Oldenbarneveltstraat 156A",
+    "Latitude": 51.91894881,
+    "Longitude": 4.47286187,
+    "Tap Water Policy": "No, they charge high price",
+    "Comments": "7 euro for a bottle"
   }
 ]
