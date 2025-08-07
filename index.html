@@ -224,7 +224,7 @@
         }
 
         // Carga el JSON desde GitHub raw usando proxy para evitar CORS
-        fetch("https://corsproxy.io/?url=https://raw.githubusercontent.com/davidsuarez82/FreeTapWater/main/restaurants.json")
+        fetch("restaurants.json")
           .then(response => response.json())
           .then(data => {
             data.forEach(restaurant => {
@@ -251,3 +251,4 @@
     </script>
 </body>
 </html>
+
