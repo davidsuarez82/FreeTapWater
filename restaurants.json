@@ -25,5 +25,50 @@
     "Longitude": 5.12331865,
     "Tap Water Policy": "Yes, at reasonable cost",
     "Comments": "0.5€ per glass, indicated on the menu"
+  },
+  {
+    "Restaurant Name": "Vincenzo’s",
+    "City": "Den Haag",
+    "Address": "Prins Hendrikstraat 75",
+    "Latitude": 52.08187441,
+    "Longitude": 4.29261783,
+    "Tap Water Policy": "No, they charge high price",
+    "Comments": "Confirmed at Vincenzos Zeeheldenkwartier"
+  },
+  {
+    "Restaurant Name": "Shizzle",
+    "City": "Appeldoorn",
+    "Address": "Kerklaan 17",
+    "Latitude": 52.2174029,
+    "Longitude": 5.9613791,
+    "Tap Water Policy": "No, they charge high price",
+    "Comments": ""
+  },
+  {
+    "Restaurant Name": "Tokyo Ramen Takeichi",
+    "City": "Amsterdam",
+    "Address": "Vijzelstraat 135",
+    "Latitude": 52.36249244,
+    "Longitude": 4.89209845,
+    "Tap Water Policy": "No, they charge high price",
+    "Comments": "They won't serve tap water. Bottled water is 4 euros / 250ml"
+  },
+  {
+    "Restaurant Name": "NJoy",
+    "City": "Amsterdam",
+    "Address": "Korte Leidsedwarsstraat 93",
+    "Latitude": 52.36390727,
+    "Longitude": 4.88406493,
+    "Tap Water Policy": "Yes, for free",
+    "Comments": ""
+  },
+  {
+    "Restaurant Name": "Bar-B Burgers ‘N’ Beers",
+    "City": "Amsterdam",
+    "Address": "Lange Leidsedwarsstraat 29",
+    "Latitude": 52.36435452,
+    "Longitude": 4.88428438,
+    "Tap Water Policy": "No, they charge high price",
+    "Comments": "They refuse to give tap water when asked and say only bottle water is available, despite being a bar and serving a lot of alcohol, they do not offer free water with any alcohol."
   }
 ]
