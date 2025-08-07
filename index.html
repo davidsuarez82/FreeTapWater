@@ -186,7 +186,7 @@
             <iframe id="modal-iframe" src="https://app.youform.com/forms/ubbqidvt"></iframe>
         </div>
     </div>
-    <!-- Leaflet JS (con integrity correcto) -->
+    <!-- Leaflet JS -->
     <script 
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -204,16 +204,16 @@
             if (e.target === this) closeModal();
         });
 
-        // --- MAPA LEAFLET ---
-        // Inicia el mapa centrado en NL
+        // --- LEAFLET MAP ---
+        // Start map centered in NL
         const map = L.map('map').setView([52.37, 4.89], 7);
 
-        // Añade capa de tiles
+        // Add tiles layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Asocia colores por categoría
+        // Asociate colors with categories
         function getColor(policy) {
           switch (policy) {
             case "No, they charge high price": return "red";
@@ -223,7 +223,7 @@
           }
         }
 
-        // Carga el JSON desde GitHub raw usando proxy para evitar CORS
+        // Load JSON from GitHub raw
         fetch("restaurants.json")
           .then(response => response.json())
           .then(data => {
@@ -245,10 +245,9 @@
           })
           .catch(error => {
             console.error("Error loading JSON:", error);
-            alert("No se pudo cargar el archivo de restaurantes.");
+            alert("Restaurtants layer can't be loaded");
           });
 
     </script>
 </body>
 </html>
-
