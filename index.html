@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Discover restaurants that offer free tap water!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,400|Roboto:400,300" rel="stylesheet">
+    <link 
+      rel="stylesheet" 
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #def2ea 0%, #d3dbf7 100%);
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        .header {
+            background: rgba(255,255,255,0.6);
+            margin: 32px auto 0 auto;
+            border-radius: 24px;
+            max-width: 900px;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.06);
+            padding: 32px 0 24px 0;
+            text-align: center;
+        }
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #2b2e3a;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .section {
+            background: rgba(255,255,255,0.6);
+            margin-top: 18px;
+            border-radius: 10px;
+            padding: 24px 32px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+        }
+        .section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7em;
+            margin: 0 0 10px 0;
+            color: #3d4049;
+            font-weight: 400;
+        }
+        .section p {
+            font-size: 1.13em;
+            color: #5c5f6b;
+            margin: 0;
+            line-height: 1.6;
+        }
+        .btn-wrap {
+            text-align: center;
+            margin: 32px 0 0 0;
+        }
+        .share-btn {
+            background: #b2c8f6;
+            color: #333;
+            font-size: 1.3em;
+            font-weight: 500;
+            border: none;
+            border-radius: 24px;
+            padding: 18px 48px;
+            cursor: pointer;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+            transition: background 0.2s;
+        }
+        .share-btn:hover {
+            background: #91b7ef;
+        }
+        #modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(50,60,90,0.45);
+            align-items: center;
+            justify-content: center;
+        }
+        #modal-content {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 560px;
+            width: 90vw;
+            box-shadow: 0 2px 18px rgba(0,0,0,0.18);
+            position: relative;
+            padding: 0;
+        }
+        #modal-close {
+            position: absolute;
+            right: 18px; top: 10px;
+            font-size: 2em;
+            color: #bbb;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #modal-iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 0 0 16px 16px;
+        }
+        .map-wrap {
+            max-width: 900px;
+            margin: 32px auto 40px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 12px rgba(0,0,0,0.08);
+        }
+        #map {
+            width: 100%;
+            height: 420px;
+            border: none;
+        }
+        @media (max-width: 700px) {
+            .header, .container, .map-wrap {
+                max-width: 98vw;
+            }
+            .section {
+                padding: 20px 10px;
+            }
+            #map {
+                height: 260px;
+            }
+            #modal-iframe {
+                height: 400px;
+            }
+        }
+        .popup-content div {
+            margin-bottom: 6px;
+        }
+        .info.legend {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+            line-height: 18px;
+            color: #333;
+        }
+        .info.legend input[type="checkbox"] {
+            margin-right: 6px;
+        }
+        .info.legend label {
+            display: block;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Discover restaurants that offer free tap water!</h1>
+    </div>
+    <div class="container">
+        <div class="section intro">
+            <p>
+                In the Netherlands, it's common for restaurants and cafés to charge exorbitant prices for bottled water. [...] 
+            </p>
+        </div>
+        <div class="section objective">
+            <h2>Objective</h2>
+            <p>
+                Our goal is to create a collaborative database of restaurants and cafés that provide free or reasonably priced tap water. [...]
+            </p>
+        </div>
+        <div class="section help">
+            <h2>How You Can Help</h2>
+            <p>
+                If you know of a restaurant or café that offers free or affordable tap water, please share their details with us. [...]
+            </p>
+        </div>
+        <div class="btn-wrap">
+            <button class="share-btn" onclick="openModal()">Share Details</button>
+        </div>
+    </div>
+    <div class="map-wrap">
+        <div id="map"></div>
+    </div>
+    <div id="modal">
+        <div id="modal-content">
+            <button id="modal-close" onclick="closeModal()">&times;</button>
+            <iframe id="modal-iframe" src="https://app.youform.com/forms/ubbqidvt"></iframe>
+        </div>
+    </div>
+    <script 
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin="">
+    </script>
+    <script>
+        function openModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+        document.getElementById("modal").addEventListener("click", function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        const map = L.map('map').setView([52.37, 4.89], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const categoryGroups = {};
+        const allCategories = new Set();
+
+        fetch("restaurants.json")
+          .then(response => response.json())
+          .then(data => {
+            data.forEach(restaurant => {
+              const category = restaurant["Tap Water Policy"] || "Unknown";
+              allCategories.add(category);
+              if (!categoryGroups[category]) {
+                categoryGroups[category] = L.layerGroup().addTo(map);
+              }
+              const marker = L.circleMarker([restaurant.Latitude, restaurant.Longitude], {
+                radius: 8,
+                color: getColor(category),
+                fillColor: getColor(category),
+                fillOpacity: 0.8
+              }).bindPopup(`
+                <div class="popup-content">
+                <div><b>${restaurant["Restaurant Name"]}</b></div>
+                <div><u>${restaurant.City} - ${restaurant.Address}</u></div>
+                <div><i>${category}</i></div>
+                <div>${restaurant.Comments || ""}</div>
+                </div>
+              `);
+              categoryGroups[category].addLayer(marker);
+            });
+
+            const legend = L.control({ position: "topright" });
+            legend.onAdd = function(map) {
+              const div = L.DomUtil.create("div", "info legend");
+              div.innerHTML += "<strong>Tap Water Policy</strong><br>";
+              allCategories.forEach(category => {
+                const safeId = category.replace(/\s+/g, '_');
+                div.innerHTML += `
+                  <label id="label_${safeId}" style="opacity: 1;">
+                    <input type="checkbox" class="legend-checkbox" data-category="${category}" checked>
+                    ${category}
+                  </label>
+                `;
+              });
+              return div;
+            };
+            legend.addTo(map);
+
+            document.querySelectorAll(".legend-checkbox").forEach(checkbox => {
+              checkbox.addEventListener("change", (e) => {
+                const category = e.target.dataset.category;
+                const isChecked = e.target.checked;
+                const safeId = category.replace(/\s+/g, '_');
+                const label = document.getElementById("label_" + safeId);
+                if (isChecked) {
+                  categoryGroups[category].addTo(map);
+                  label.style.opacity = 1;
+                } else {
+                  map.removeLayer(categoryGroups[category]);
+                  label.style.opacity = 0.4;
+                }
+              });
+            });
+          });
+
+        function getColor(policy) {
+          switch (policy) {
+            case "No, they charge high price": return "red";
+            case "Yes, at reasonable cost": return "orange";
+            case "Yes, for free": return "green";
+            default: return "blue";
+          }
+        }
+    </script>
+</body>
+</html>
