@@ -6,7 +6,7 @@
     "Latitude": 52.6627561,
     "Longitude": 4.8271265,
     "Tap Water Policy": "No, they charge high price",
-    "Comments": "approximately €4 for a 20cl bottle"
+    "Comments": "approximately €4 for a 25cl bottle"
   },
   {
     "Restaurant Name": "Kim's So Korean Food Centrum",
@@ -51,7 +51,7 @@
     "Latitude": 52.36249244,
     "Longitude": 4.89209845,
     "Tap Water Policy": "No, they charge high price",
-    "Comments": "They won't serve tap water. Bottled water is 4 euros / 250ml"
+    "Comments": "They won't serve tap water. Bottled water is 4 euros / 25cl"
   },
   {
     "Restaurant Name": "NJoy",
@@ -124,5 +124,14 @@
     "Longitude": 4.47286187,
     "Tap Water Policy": "No, they charge high price",
     "Comments": "7 euro for a bottle"
+  },
+  {
+    "Restaurant Name": "Indochine Cafe",
+    "City": "Rotterdam",
+    "Address": "Grotemarkt 272",
+    "Latitude": 51.92040005,
+    "Longitude": 4.48607437,
+    "Tap Water Policy": "Yes, for free",
+    "Comments": "If you order another drink from the menu"
   }
 ]
