@@ -239,7 +239,7 @@
                     categoryGroups[cat].addLayer(m);
                 });
 
-                const legend = L.control({ position: "topright" });
+                const legend = L.control({ position: "bottomright" });
                 legend.onAdd = function () {
                     const div = L.DomUtil.create("div", "info legend");
                     div.innerHTML += "<strong>Tap Water Policy</strong><br>";
@@ -284,3 +284,4 @@
     </script>
 </body>
 </html>
+
