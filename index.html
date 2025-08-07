@@ -150,7 +150,22 @@
         }
         .popup-content div {
         margin-bottom: 6px;
-    }
+        }
+
+        .info.legend {
+            background: white;
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+            line-height: 18px;
+            color: #333;
+        }
+        
+        .info.legend h4 {
+            margin: 0 0 8px 0;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -252,9 +267,33 @@
             console.error("Error loading JSON:", error);
             alert("Restaurtants layer can't be loaded");
           });
-
+        
+        const legend = L.control({ position: "bottomright" });
+        
+        legend.onAdd = function (map) {
+            const div = L.DomUtil.create("div", "info legend");
+            const policies = [
+                { color: "red", label: "No, they charge high price" },
+                { color: "orange", label: "Yes, at reasonable cost" },
+                { color: "green", label: "Yes, for free" },
+            ];
+            
+            let html = "<h4>Tap Water Policy</h4>";
+            policies.forEach((policy) => {
+                html +=
+                    `<i style="background:${policy.color}; width:18px; height:18px; display:inline-block; margin-right:8px; border-radius:3px;"></i> ` +
+                    policy.label +
+                    "<br>";
+            });
+            
+            div.innerHTML = html;
+            return div;
+        };
+        
+        legend.addTo(map);
     </script>
 </body>
 </html>
+
 
 
