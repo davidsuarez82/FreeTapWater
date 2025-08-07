@@ -1,252 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Discover restaurants that offer free tap water!</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,400|Roboto:400,300" rel="stylesheet">
-
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha512-sA+e2n5C7JG+M0a6H4Vz4LHRvO1HdM3HzwArxTVrZK+YBDAJrMJ94RiwVw2Ed9qqy7KSoOwA2aGQ6r6E1V7dAA=="
+  <meta charset="utf-8" />
+  <title>Free Tap Water Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link 
+    rel="stylesheet" 
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+    integrity="sha256-sA+4xQb19lGStnEo0kD+jZEem6vKxH6LXYf75m7YQ9o=" 
     crossorigin=""
   />
-
   <style>
-    body {
-      margin: 0;
-      background: linear-gradient(135deg, #def2ea 0%, #d3dbf7 100%);
-      font-family: 'Roboto', Arial, sans-serif;
-    }
-    .header {
-      background: rgba(255,255,255,0.6);
-      margin: 32px auto 0 auto;
-      border-radius: 24px;
-      max-width: 900px;
-      box-shadow: 0 2px 14px rgba(0,0,0,0.06);
-      padding: 32px 0 24px 0;
-      text-align: center;
-    }
-    .header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8em;
-      font-weight: 700;
-      color: #2b2e3a;
-      margin: 0;
-      letter-spacing: 1px;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .section {
-      background: rgba(255,255,255,0.6);
-      margin-top: 18px;
-      border-radius: 10px;
-      padding: 24px 32px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
-    }
-    .section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.7em;
-      margin: 0 0 10px 0;
-      color: #3d4049;
-      font-weight: 400;
-    }
-    .section p {
-      font-size: 1.13em;
-      color: #5c5f6b;
-      margin: 0;
-      line-height: 1.6;
-    }
-    .btn-wrap {
-      text-align: center;
-      margin: 32px 0 0 0;
-    }
-    .share-btn {
-      background: #b2c8f6;
-      color: #333;
-      font-size: 1.3em;
-      font-family: 'Roboto', Arial, sans-serif;
-      font-weight: 500;
-      border: none;
-      border-radius: 24px;
-      padding: 18px 48px;
-      cursor: pointer;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
-      transition: background 0.2s;
-    }
-    .share-btn:hover {
-      background: #91b7ef;
-    }
-    #modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0; top: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(50,60,90,0.45);
-      align-items: center;
-      justify-content: center;
-    }
-    #modal-content {
-      background: #fff;
-      border-radius: 16px;
-      max-width: 560px;
-      width: 90vw;
-      box-shadow: 0 2px 18px rgba(0,0,0,0.18);
-      position: relative;
-      padding: 0;
-    }
-    #modal-close {
-      position: absolute;
-      right: 18px; top: 10px;
-      font-size: 2em;
-      color: #bbb;
-      background: none;
-      border: none;
-      cursor: pointer;
-      z-index: 10;
-    }
-    #modal-iframe {
-      width: 100%;
-      height: 600px;
-      border: none;
-      border-radius: 0 0 16px 16px;
-    }
-    .map-wrap {
-      max-width: 900px;
-      margin: 32px auto 40px auto;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 1px 12px rgba(0,0,0,0.08);
-    }
-    #map {
-      width: 100%;
-      height: 420px;
-      display: block;
-    }
-    @media (max-width: 700px) {
-      .header, .container, .map-wrap {
-        max-width: 98vw;
-      }
-      .section {
-        padding: 20px 10px;
-      }
-      #map {
-        height: 260px;
-      }
-      #modal-iframe {
-        height: 400px;
-      }
-    }
+    body { margin: 0; padding: 0; }
+    #map { width: 100%; height: 100vh; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Discover restaurants that offer free tap water!</h1>
-  </div>
-  <div class="container">
-    <div class="section intro">
-      <p>
-        In the Netherlands, it's common for restaurants and cafés to charge exorbitant prices for bottled water. This practice often leads to frustration among clients who feel compelled to pay for something that should be freely available.
-      </p>
-    </div>
-    <div class="section objective">
-      <h2>Objective</h2>
-      <p>
-        Our goal is to create a collaborative database of restaurants and cafés that provide free or reasonably priced tap water.
-      </p>
-    </div>
-    <div class="section help">
-      <h2>How You Can Help</h2>
-      <p>
-        If you know of a restaurant or café that offers free or affordable tap water, please share their details with us.
-      </p>
-    </div>
-    <div class="btn-wrap">
-      <button class="share-btn" onclick="openModal()">Share Details</button>
-    </div>
-  </div>
+  <div id="map"></div>
 
-  <div class="map-wrap">
-    <div id="map"></div>
-  </div>
-
-  <div id="modal">
-    <div id="modal-content">
-      <button id="modal-close" onclick="closeModal()">&times;</button>
-      <iframe id="modal-iframe" src="https://app.youform.com/forms/ubbqidvt"></iframe>
-    </div>
-  </div>
-
-  <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha512-kxW5AztWlEwENkG6C3tYEnR7FrD1T4DXe5EZe+dl6XK8qZ9fxl9aLBn0nqxknldEx9dswRM0nP+PpnB+8j3wAw=="
-    crossorigin=""
-  ></script>
-
+  <script 
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+    integrity="sha256-QVJH5E0obw1UJYF2Y9I9/9gfujExk6x0WqCg/n9C1Ko=" 
+    crossorigin="">
+  </script>
   <script>
-    function openModal() {
-      document.getElementById("modal").style.display = "flex";
-    }
-    function closeModal() {
-      document.getElementById("modal").style.display = "none";
-    }
-    document.getElementById("modal").addEventListener("click", function(e) {
-      if (e.target === this) closeModal();
-    });
+    // Inicia el mapa
+    const map = L.map('map').setView([52.37, 4.89], 7); // Centro en Países Bajos
 
-    // JSON Data
-    const restaurants = [
-      {
-        "Restaurant Name": "Bij Rembrandt",
-        "City": "Heerhugowaard",
-        "Address": "Middenwaard 87",
-        "Latitude": 52.6627561,
-        "Longitude": 4.8271265,
-        "Tap Water Policy": "No, they charge high price",
-        "Comments": "4€ for small bottle"
-      }
-    ];
-
-    // Color by policy
-    function getColor(policy) {
-      switch (policy) {
-        case "Yes, for free": return "green";
-        case "Yes, at reasonable cost": return "orange";
-        case "No, they charge high price": return "red";
-        default: return "gray";
-      }
-    }
-
-    const map = L.map('map').setView([52.37, 4.89], 8);
-
+    // Añade capa de tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
+      attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    restaurants.forEach(r => {
-      const marker = L.circleMarker([r.Latitude, r.Longitude], {
-        radius: 10,
-        fillColor: getColor(r["Tap Water Policy"]),
-        color: "#000",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
-      });
+    // Asocia colores por categoría
+    function getColor(policy) {
+      switch (policy) {
+        case "No, they charge high price": return "red";
+        case "Yes, at reasonable cost": return "orange";
+        case "Yes, for free": return "green";
+        default: return "blue";
+      }
+    }
 
-      const popup = `
-        <strong>${r["Restaurant Name"]}</strong><br>
-        ${r.Address}, ${r.City}<br>
-        <strong>Policy:</strong> ${r["Tap Water Policy"]}<br>
-        <strong>Comments:</strong> ${r.Comments}
-      `;
-      marker.bindPopup(popup).addTo(map);
-    });
+    // Carga el JSON desde GitHub raw
+    fetch("https://raw.githubusercontent.com/davidsuarez82/FreeTapWater/main/restaurants.json")
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(restaurant => {
+          const marker = L.circleMarker([restaurant.Latitude, restaurant.Longitude], {
+            radius: 8,
+            color: getColor(restaurant["Tap Water Policy"]),
+            fillColor: getColor(restaurant["Tap Water Policy"]),
+            fillOpacity: 0.8
+          }).addTo(map);
+
+          marker.bindPopup(`
+            <b>${restaurant["Restaurant Name"]}</b><br>
+            ${restaurant.City} - ${restaurant.Address}<br>
+            <i>${restaurant["Tap Water Policy"]}</i><br>
+            ${restaurant.Comments || ""}
+          `);
+        });
+      })
+      .catch(error => {
+        console.error("Error loading JSON:", error);
+        alert("No se pudo cargar el archivo de restaurantes.");
+      });
   </script>
 </body>
 </html>
