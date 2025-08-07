@@ -148,6 +148,9 @@
                 height: 400px;
             }
         }
+        .popup-content div {
+        margin-bottom: 6px;
+    }
     </style>
 </head>
 <body>
@@ -236,10 +239,12 @@
               }).addTo(map);
 
               marker.bindPopup(`
-                <b>${restaurant["Restaurant Name"]}</b><br>
-                ${restaurant.City} - ${restaurant.Address}<br>
-                <i>${restaurant["Tap Water Policy"]}</i><br>
-                ${restaurant.Comments || ""}
+                <div class="popup-content">
+                <div><b>${restaurant["Restaurant Name"]}</b></div>
+                <div>${restaurant.City} - ${restaurant.Address}</div>
+                <div><i>${restaurant["Tap Water Policy"]}</i></div>
+                <div>${restaurant.Comments || ""}</div>
+                </div>
               `);
             });
           })
@@ -251,3 +256,4 @@
     </script>
 </body>
 </html>
+
