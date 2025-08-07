@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tap Water Policy Map</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha512-sA+e2n5C7JG+M0a6H4Vz4LHRvO1HdM3HzwArxTVrZK+YBDAJrMJ94RiwVw2Ed9qqy7KSoOwA2aGQ6r6E1V7dAA=="
+    crossorigin=""
+  />
+
+  <style>
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha512-kxW5AztWlEwENkG6C3tYEnR7FrD1T4DXe5EZe+dl6XK8qZ9fxl9aLBn0nqxknldEx9dswRM0nP+PpnB+8j3wAw=="
+    crossorigin=""
+  ></script>
+
+  <script>
+    const map = L.map('map').setView([52.370216, 4.895168], 8); // Centrado en Países Bajos
+
+    // Añadir tile layer (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+
+    // Tu JSON
+    const restaurants = [
+      {
+        "Restaurant Name": "Bij Rembrandt",
+        "City": "Heerhugowaard",
+        "Address": "Middenwaard 87",
+        "Latitude": 52.6627561,
+        "Longitude": 4.8271265,
+        "Tap Water Policy": "No, they charge high price",
+        "Comments": "4€ for small bottle"
+      }
+    ];
+
+    // Función para asignar color por categoría
+    function getColor(policy) {
+      switch (policy) {
+        case "Yes, for free": return "green";
+        case "Yes, at reasonable cost": return "orange";
+        case "No, they charge high price": return "red";
+        default: return "gray";
+      }
+    }
+
+    // Añadir marcadores
+    restaurants.forEach(r => {
+      const marker = L.circleMarker([r.Latitude, r.Longitude], {
+        radius: 10,
+        fillColor: getColor(r["Tap Water Policy"]),
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      });
+
+      const popupContent = `
+        <strong>${r["Restaurant Name"]}</strong><br/>
+        ${r.Address}, ${r.City}<br/>
+        <strong>Policy:</strong> ${r["Tap Water Policy"]}<br/>
+        <strong>Comments:</strong> ${r.Comments}
+      `;
+
+      marker.bindPopup(popupContent).addTo(map);
+    });
+  </script>
+</body>
+</html>
